@@ -1,6 +1,4 @@
-import './assets/main.css'
-import "vuestic-ui/css";
-import { createVuestic } from "vuestic-ui";
+import './assets/index.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -11,5 +9,4 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-app.use(createVuestic())
 app.mount('#app')
