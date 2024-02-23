@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import authService from "../../services/authService";
 import { h } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
@@ -17,7 +18,7 @@ import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/toast'
 
 const formSchema = toTypedSchema(z.object({
-  username: z.string().min(2).max(50),
+  userName: z.string().min(2).max(50),
   password: z.string().min(2).max(6)
 }))
 
@@ -26,17 +27,16 @@ const { handleSubmit } = useForm({
 })
 
 const onSubmit = handleSubmit((values) => {
-  toast({
-    title: 'You submitted the following values:',
-    description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' }, h('code', { class: 'text-white' }, JSON.stringify(values, null, 2))),
-  })
+  authService.login(values).then((res) => {
+    localStorage.setItem('authTokens', JSON.stringify(res))
+  });
 })
 </script>
 
 <template>
   <div>
     <form class="space-y-2 w-1/3 pt-32 ml-auto mr-auto" @submit="onSubmit">
-    <FormField v-slot="{ componentField }" name="username">
+    <FormField v-slot="{ componentField }" name="userName">
       <FormItem>
         <FormLabel>Username</FormLabel>
         <FormControl>
