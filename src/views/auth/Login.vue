@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import authService from "../../services/authService";
 import { h } from 'vue'
+import { useRouter } from "vue-router";
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -16,7 +17,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/toast'
-
+const router = useRouter();
 const formSchema = toTypedSchema(z.object({
   userName: z.string().min(2).max(50),
   password: z.string().min(2).max(6)
@@ -29,6 +30,7 @@ const { handleSubmit } = useForm({
 const onSubmit = handleSubmit((values) => {
   authService.login(values).then((res) => {
     localStorage.setItem('authTokens', JSON.stringify(res))
+    router.push({ name: "home" })
   });
 })
 </script>
